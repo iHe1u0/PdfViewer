@@ -23,10 +23,20 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermission();
+        } else {
+            showActivity();
+        }
+    }
 
-        //this.finish();
+    private void showActivity() {
+        if (getIntent().getDataString() != null) {
+            Intent intent = new Intent(this, PdfActivity.class);
+            intent.putExtra(PATH, getIntent().getData());
+            startActivity(intent);
+            SplashActivity.this.finish();
+        }
     }
 
     /**
@@ -46,6 +56,8 @@ public class SplashActivity extends BaseActivity {
             });
             builder.setCancelable(false);
             builder.show();
+        } else {
+            showActivity();
         }
     }
 
@@ -57,11 +69,7 @@ public class SplashActivity extends BaseActivity {
                     Toast.makeText(getApplicationContext(), "应用可能无法正常运行", Toast.LENGTH_LONG).show();
                 }
             }
-            if (getIntent().getDataString() != null) {
-                Intent intent = new Intent(this, PdfActivity.class);
-                intent.putExtra(PATH, getIntent().getData());
-                startActivity(intent);
-            }
         }
+        showActivity();
     }
 }

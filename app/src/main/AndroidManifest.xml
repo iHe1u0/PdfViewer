@@ -28,7 +28,9 @@
                 <data android:mimeType="application/pdf" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PdfActivity" />
+        <activity
+            android:name=".activity.PdfActivity"
+            android:launchMode="standard" />
     </application>
 
 </manifest>

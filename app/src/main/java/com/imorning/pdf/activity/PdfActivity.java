@@ -27,6 +27,14 @@ public class PdfActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pdfView.fromUri(uriPath).load();
+        pdfView.fromUri(uriPath)
+                //.defaultPage(300)
+                .load();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LogV(pdfView.getCurrentPage());
     }
 }
