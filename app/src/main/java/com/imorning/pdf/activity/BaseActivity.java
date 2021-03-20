@@ -9,9 +9,11 @@ import com.imorning.pdf.BuildConfig;
 public class BaseActivity extends AppCompatActivity {
     public void LogV(Object... msg) {
         if (BuildConfig.DEBUG) {
+            StringBuffer logMsg=new StringBuffer();
             for (Object m : msg) {
-                Log.v(getClass().getSimpleName(), m.toString());
+                logMsg.append(m.toString());
             }
+            Log.v("In Class:" + getClass().getSimpleName(), logMsg.toString());
         }
     }
 }
