@@ -1,41 +1,71 @@
 package com.imorning.pdf.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.imorning.pdf.R;
+import com.imorning.pdf.bean.History;
+import com.imorning.pdf.bean.RecentAdapter;
+import com.imorning.pdf.bean.RecentList;
+
+import org.litepal.LitePal;
+import org.litepal.tablemanager.Connector;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SplashActivity extends BaseActivity {
-    public static final String PATH = "filePath";
     private static final int PERMISSION_REQUEST_CODE = 1;
     private final String[] permissionList = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+    @SuppressLint("NonConstantResourceId")
+    @BindView(R.id.recent_list)
+    RecyclerView recyclerView;
+    private List<RecentList> recentLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermission();
-        } else {
-            showActivity();
         }
+        Connector.getDatabase();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recentLists = new ArrayList<>();
+        List<History> histories = LitePal.findAll(History.class);
+        initList(histories);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        RecentAdapter recentAdapter = new RecentAdapter(recentLists);
+        recyclerView.setAdapter(recentAdapter);
     }
 
-    private void showActivity() {
-        if (getIntent().getDataString() != null) {
-            Intent intent = new Intent(this, PdfActivity.class);
-            intent.putExtra(PATH, getIntent().getData());
-            startActivity(intent);
-            SplashActivity.this.finish();
+    private void initList(List<History> histories) {
+        for (History history : histories) {
+            RecentList recentList = new RecentList(history.getFileName(), history.getFilePath(), history.getLastTime(), history.getPage());
+            recentLists.add(recentList);
         }
     }
 
@@ -56,8 +86,6 @@ public class SplashActivity extends BaseActivity {
             });
             builder.setCancelable(false);
             builder.show();
-        } else {
-            showActivity();
         }
     }
 
@@ -70,6 +98,5 @@ public class SplashActivity extends BaseActivity {
                 }
             }
         }
-        showActivity();
     }
 }

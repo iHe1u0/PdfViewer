@@ -1,0 +1,5 @@
+# ninja log v5
+1	675	638029884	CMakeFiles/fileutils.dir/fileutils.cpp.o	1578c86922aab9b5
+676	833	638029884	G:/Projects/AndroidStudioProjects/PdfViewer/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libfileutils.so	e4ed465fe48c101
+3	642	638031336	CMakeFiles/fileutils.dir/fileutils.cpp.o	1578c86922aab9b5
+642	803	638031336	G:/Projects/AndroidStudioProjects/PdfViewer/app/build/intermediates/cmake/debug/obj/armeabi-v7a/libfileutils.so	e4ed465fe48c101
