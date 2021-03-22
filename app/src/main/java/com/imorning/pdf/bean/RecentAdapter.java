@@ -1,8 +1,6 @@
 package com.imorning.pdf.bean;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.imorning.pdf.R;
 import com.imorning.pdf.activity.PdfActivity;
-import com.imorning.pdf.activity.SplashActivity;
+import com.imorning.pdf.utils.Type;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.Locale;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder> {
     private final List<RecentList> recentLists;
@@ -59,17 +57,12 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rencent_list, parent, false);
         ViewHolder holder = new ViewHolder(view);
         holder.fileNameTextView.setOnClickListener(v -> {
-            int position = holder.getAdapterPosition();
-            RecentList recentList = recentLists.get(position);
-            //   /root/storage/emulated/0/Android/data/cn.wps.moffice_eng/.Cloud/cn/21799544/f/2ef1df1a-6199-425a-86db-01b38e2120db/21天学通c++_第7版.pdf
-            File file = new File(recentList.getFilePath());
-            if (file.exists()) {
-                Intent intent = new Intent(parent.getContext(), PdfActivity.class);
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setData(Uri.fromFile(file));
-                parent.getContext().startActivity(intent);
-            }
+            RecentList recentList = recentLists.get(holder.getAdapterPosition());
+            String filePath = recentList.getFilePath();
+            Intent intent = new Intent(parent.getContext(), PdfActivity.class);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Type.OPEN_PDF_IN_LIST, filePath);
+            parent.getContext().startActivity(intent);
         });
         return holder;
     }
@@ -98,7 +91,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecentList recentList = recentLists.get(position);
         holder.fileNameTextView.setText(recentList.getFileName());
-        holder.lastTimeTextView.setText(String.valueOf(recentList.getLastTime()));
+        holder.lastTimeTextView.setText(new SimpleDateFormat("yyyy年MM月dd日HH时mm分", Locale.getDefault()).format(new Date(recentList.getLastTime())));
         holder.pageTextView.setText(String.valueOf(recentList.getPage()));
     }
 
