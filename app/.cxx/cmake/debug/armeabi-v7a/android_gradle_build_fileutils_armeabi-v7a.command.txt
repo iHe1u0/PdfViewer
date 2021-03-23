@@ -1,7 +1,0 @@
-Executable : F:\Android\Sdk\cmake\3.10.2.4988404\bin\ninja.exe
-arguments : 
--C
-G:\Projects\AndroidStudioProjects\PdfViewer\app\.cxx\cmake\debug\armeabi-v7a
-fileutils
-jvmArgs : 
-

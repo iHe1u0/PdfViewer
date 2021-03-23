@@ -1,3 +1,0 @@
-G:/Projects/AndroidStudioProjects/PdfViewer/app/.cxx/cmake/release/arm64-v8a/CMakeFiles/fileutils.dir
-G:/Projects/AndroidStudioProjects/PdfViewer/app/.cxx/cmake/release/arm64-v8a/CMakeFiles/edit_cache.dir
-G:/Projects/AndroidStudioProjects/PdfViewer/app/.cxx/cmake/release/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -1,3 +1,0 @@
-ninja: Entering directory `G:\Projects\AndroidStudioProjects\PdfViewer\app\.cxx\cmake\debug\x86'
-[1/2] Building CXX object CMakeFiles/fileutils.dir/fileutils.cpp.o
-[2/2] Linking CXX shared library G:\Projects\AndroidStudioProjects\PdfViewer\app\build\intermediates\cmake\debug\obj\x86\libfileutils.so
