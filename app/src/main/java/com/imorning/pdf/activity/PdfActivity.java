@@ -9,8 +9,8 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.imorning.pdf.R;
 import com.imorning.pdf.bean.History;
 import com.imorning.pdf.utils.NormalFileUtils;
+import com.imorning.pdf.utils.PdfFileUtils;
 import com.imorning.pdf.utils.Type;
-import com.imorning.pdf.utils.UriUtils;
 
 import org.litepal.LitePal;
 
@@ -26,7 +26,6 @@ public class PdfActivity extends BaseActivity {
     PDFView pdfView;
 
     private String filePath;
-    private Uri uriPath;
     private History history;
     private int page = 0;
     private File pdfFile = null;
@@ -37,17 +36,13 @@ public class PdfActivity extends BaseActivity {
         setContentView(R.layout.activity_pdf);
         ButterKnife.bind(this);
         if (getIntent().getStringExtra(Type.OPEN_PDF_IN_LIST) != null) {
-            uriPath = Uri.parse(getIntent().getStringExtra(Type.OPEN_PDF_IN_LIST));
-            filePath = UriUtils.getRealPathFromUri(PdfActivity.this, uriPath);
+            filePath = getIntent().getStringExtra(Type.OPEN_PDF_IN_LIST);
         } else {
-            uriPath = getIntent().getData();
-            filePath = uriPath.getPath();
+            filePath = PdfFileUtils.getFileAbsolutePath(this, getIntent().getData());
         }
         pdfFile = new File(filePath);
-        LogV("filePath:", filePath, "---uriPath:", uriPath, "---exist:", pdfFile.exists());
-        if (filePath == null)
-            finish();
-        grantUriPermission(getPackageName(), uriPath, Intent.FLAG_GRANT_READ_URI_PERMISSION);//解决夜间模式切换时的数据丢失
+        LogV("FileInfo:\nfilePath:", filePath, "\n---exist:", PdfFileUtils.isAndroidQFileExists(this, getIntent().getDataString()));
+        grantUriPermission(getPackageName(), Uri.fromFile(pdfFile), Intent.FLAG_GRANT_READ_URI_PERMISSION);//解决夜间模式切换时的数据丢失
     }
 
     @Override
@@ -66,11 +61,11 @@ public class PdfActivity extends BaseActivity {
         if (history == null) {
             history = new History();
             history.setFileName(NormalFileUtils.getFileName(filePath));
-            history.setFilePath(uriPath.getPath());
+            history.setFilePath(filePath);
         }
         pdfView.useBestQuality(true);
         if (pdfFile == null) {
-            pdfView.fromUri(uriPath).load();
+            pdfView.fromFile(new File(filePath)).load();
         } else {
             pdfView.fromFile(pdfFile).load();
         }
@@ -95,7 +90,7 @@ public class PdfActivity extends BaseActivity {
      * 保存当前的页码
      */
     private void save() {
-        if (pdfView != null && filePath != null && uriPath != null) {
+        if (pdfView != null && filePath != null) {
             history.setPage(pdfView.getCurrentPage());
             history.setLastTime(System.currentTimeMillis());
             history.save();
