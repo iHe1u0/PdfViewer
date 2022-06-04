@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.imorning.pdf">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
@@ -20,6 +19,7 @@
         android:theme="@style/Theme.Pdf"
         tools:targetApi="r">
         <activity
+            android:exported="true"
             android:name=".activity.SplashActivity"
             android:authorities="com.imorning.pdf.activity.SplashActivity">
             <intent-filter>
